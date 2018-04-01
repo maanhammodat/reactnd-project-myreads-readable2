@@ -25,11 +25,52 @@ class Menu extends Component {
 
         return (
             
-            <div className="row">
+            <div className="row pb-2">
                 <div className="col">
-                       
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+                        <span className="navbar-brand">Readable</span>
+                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
+                            aria-expanded="false" aria-label="Toggle navigation" style="">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div className="collapse navbar-collapse" id="navbarColor01">
+                            <ul className="navbar-nav mr-auto">
+                                <li className="nav-item active">
+                                    <a className="nav-link">All</a>
+                                </li>
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        Categories
+                                </a>
+                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a className="dropdown-item">Action</a>
+                                        <a className="dropdown-item">Another action</a>
+                                        <a className="dropdown-item">Something else here</a>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link">Add Post</a>
+                                </li>
+                            </ul>
+
+
+                        </div>
+
+                        <div className="dropdown">
+                            <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Sort Posts By
+                        </button>
+                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a className="dropdown-item">Date</a>
+                                <a className="dropdown-item">Score</a>
+                            </div>
+                        </div>
+                    </nav>
                 </div>
-            </div>                                
+            </div>                             
         );
     }
 }

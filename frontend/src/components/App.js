@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AddPost from './AddPost';
 import ShowPosts from './ShowPosts';
+import Post from './Post';
+import AddPost from './AddPost';
 import { getCategories } from '../actions';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
   componentDidMount() {
@@ -13,7 +15,15 @@ class App extends Component {
     return (
       
       <div className="container">
-        <ShowPosts/>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={ShowPosts} />            
+            <Route path="/post/:id" render={({ match }) => (
+              <Post id={match.params.id} />
+            )} />
+
+          </Switch>
+        </Router>
       </div>
     );
   }

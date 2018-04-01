@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts } from '../actions';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 class ShowPosts extends Component {
@@ -34,8 +35,11 @@ class ShowPosts extends Component {
                         {posts && posts.map((post) => (
                             <div className="list-group-item list-group-item-action flex-column align-items-start" key={post.id}>
                             <div className="row">
+                                
                                 <div className="col-10">
-                                    <h3 className="mb-1"><strong>{post.title}</strong></h3>
+                                    <h3 className="mb-1">
+                                        <strong><Link to={`/post/${post.id}`}>{post.title}</Link></strong>
+                                    </h3>
                                     <h5 className="mb-1">By {post.author} | {moment(post.timestamp).fromNow()} | {post.commentCount} comments</h5>
 
                                     <h5>
@@ -55,6 +59,7 @@ class ShowPosts extends Component {
                                         <small className="text-right">Edit | Delete</small>
                                     </p>
                                 </div>
+
                             </div> 
                         </div>                           
                         ))}
