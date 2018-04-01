@@ -14,16 +14,15 @@ class AddPost extends Component {
         event.preventDefault();
         
         fetch(
-            'http://localhost:3001/categories',
+            'http://localhost:3001/posts',
             {
                 headers: { 
-                    'Authorization': 'whatever-you-want',
-                    'Content-Type': 'application/json'
+                    'Authorization': 'whatever-you-want'
                 }
             }
-        ).then((resp) => resp.json()) // Transform the data into json
+        ).then((resp) => resp) // Transform the data into json
         .then(function (data) {
-            console.log('data',data.categories);
+            console.log('data',data);
         });
         
         
