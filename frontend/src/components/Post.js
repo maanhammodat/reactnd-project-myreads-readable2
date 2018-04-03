@@ -70,13 +70,6 @@ class Post extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    const { items, searchText } = state.searchSimple;
-    return {
-        filteredItems: items.filter((item) => item.startsWith(searchText))
-    };
-}
-
 function mapStateToProps(state, props) {
     const { posts } = state;
     console.log('POST mapStateToProps state', JSON.stringify(state.posts));

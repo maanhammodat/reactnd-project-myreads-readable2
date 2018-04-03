@@ -6,18 +6,8 @@ import moment from 'moment';
 
 class ShowPosts extends Component {
 
-    constructor() {
-        super();
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleSubmit(event) {
-        event.preventDefault(); 
-        //console.log('props', this.props);         
-    }
-
     componentDidMount(){
-        this.props.getPosts();
+        //this.props.getPosts();
     }
 
     render() {
@@ -72,10 +62,13 @@ class ShowPosts extends Component {
 }
 
 function mapStateToProps(state, props) {
+    const { posts } = state;
     console.log('mapStateToProps state', JSON.stringify(state));
     console.log('mapStateToProps props', props);
 
-    return state;
+    return {
+        posts: posts ? posts : ''
+    };
 }
 
 function mapDispatchToProps(dispatch) {
