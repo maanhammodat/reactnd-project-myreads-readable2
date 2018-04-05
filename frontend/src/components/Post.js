@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPost } from '../actions';
+import { getPost, getPostComments } from '../actions';
 import moment from 'moment';
 
 class Post extends Component {
 
-    componentDidMount(){
-        //this.props.getPost('8xf0y6ziyjabvozdd253nd');
-        console.log('POST DIDMOUNT');
+    componentDidMount(){        
+        console.log('POST DIDMOUNT, ID:',this.props.id);
+        this.props.getPostComments(this.props.id);
     }
 
     render() {
@@ -72,7 +72,7 @@ class Post extends Component {
 
 function mapStateToProps(state, props) {
     const { posts } = state;
-    console.log('POST mapStateToProps state', JSON.stringify(state.posts));
+    console.log('POST mapStateToProps state', JSON.stringify(state));
     console.log('POST mapStateToProps props', props);
     //console.log('>>>POST filtered', posts.filter((post) => { return post.id === '8xf0y6ziyjabvozdd253nd' }));
     return {
@@ -82,7 +82,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getPost: (data) => dispatch(getPost(data))
+        getPostComments: (data) => dispatch(getPostComments(data))
     }
 }
 

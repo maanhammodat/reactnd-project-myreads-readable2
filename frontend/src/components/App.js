@@ -17,18 +17,19 @@ class App extends Component {
   render() {
     console.log('App Component PROPS', this.props.categories);
     return (
-      
-      <div className="container">
-        <Menu />
-        <Router>          
-          <Switch>            
-            <Route exact path="/" component={ShowPosts} />            
-            <Route path="/post/:id" render={({ match }) => (
-              <Post id={match.params.id} />
-            )} />
-          </Switch>
+
+        <Router>
+          <div className="container">
+            <Menu />                 
+            <Switch>            
+              <Route exact path="/" component={ShowPosts} />            
+              <Route path="/post/:id" render={({ match }) => (
+                <Post id={match.params.id} />
+              )} />
+            </Switch>
+          </div>
         </Router>
-      </div>
+        
     );
   }
 }

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import {
-    ADD_POST, RECEIVE_POSTS, RECEIVE_CATEGORIES, GET_POST
+    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, GET_POST
 } from '../actions';
 
 function posts(state = {}, action) {
@@ -33,6 +33,15 @@ function posts(state = {}, action) {
             return {
                 ...state,
                 posts            
+            }
+        
+        case RECEIVE_POST_COMMENTS:
+            const { comments } = action
+            console.log('RECEIVE_POST_COMMENTS', comments);
+
+            return {
+                ...state,
+                comments
             }
                        
         case RECEIVE_CATEGORIES:

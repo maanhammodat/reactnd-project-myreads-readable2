@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 class Menu extends Component {
 
     componentDidMount(){
@@ -14,7 +18,7 @@ class Menu extends Component {
         const { categories } = this.props;
 
         let cats = categories && categories.map((cat=>{
-            return <Link to={`/category/${cat.path}`} className="dropdown-item">{cat.name}</Link>
+            return <Link to={`/category/${cat.path}`} key={cat.name} className="dropdown-item">{capitalizeFirstLetter(cat.name)}</Link>
         }))
 
         console.log('MENU categories',categories);
@@ -31,12 +35,10 @@ class Menu extends Component {
                         <div className="collapse navbar-collapse" id="navbarColor01">
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item active">
-                                    <a className="nav-link">All</a>
+                                    <Link to="/" className="nav-link">All</Link>
                                 </li>
                                 <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Categories
-                                </a>
+                                    <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                         {cats}                                        
                                     </div>

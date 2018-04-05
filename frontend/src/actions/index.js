@@ -31,7 +31,7 @@ export const getPosts = () => dispatch => (
 );
 
 
-/**Get A Post */
+/**Get a Post */
 export const GET_POST = 'GET_POST';
 
 export function getPost({ id }) {
@@ -40,6 +40,20 @@ export function getPost({ id }) {
         id,
     }
 }
+
+/**Get Comments for a Post */
+export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS";
+
+export const receivePostComments = posts => ({
+    type: RECEIVE_POST_COMMENTS,
+    posts
+});
+
+export const getPostComments = (id) => dispatch => (
+    APIUtil.getPostComments(id)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => dispatch(receivePostComments(data)))
+);
 
 
 /**Add Posts */

@@ -5,12 +5,23 @@ const headers = {
     }
 }
 
-export const getCategories = () => fetch(
-    'http://localhost:3001/categories',
-    headers
-);
+export const getCategories = () => {
+    return fetch(
+        'http://localhost:3001/categories',
+        headers
+    );
+}
 
-export const getPosts = () => fetch(
-    'http://localhost:3001/posts',
-    headers
-);
+export const getPosts = () => {
+    return fetch(
+        'http://localhost:3001/posts',
+        headers
+    )
+};
+
+export const getPostComments = (id) => {
+    return fetch(
+        `http://localhost:3001/posts/${id}/comments`,
+        headers
+    );
+}
