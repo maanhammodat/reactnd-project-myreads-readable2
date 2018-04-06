@@ -31,22 +31,34 @@ export const getPosts = () => dispatch => (
 );
 
 
+/**Get Posts By Cateogry */
+export const GET_POSTS_BY_CATEGORY = 'GET_POSTS_BY_CATEGORY';
+
+export function getPostsByCategory( category ) {
+    console.log('ACTION getPostsByCategory cat:',category);
+    return {
+        type: GET_POSTS_BY_CATEGORY,
+        category
+    }
+}
+
+
 /**Get a Post */
 export const GET_POST = 'GET_POST';
 
 export function getPost({ id }) {
     return {
         type: GET_POST,
-        id,
+        id
     }
 }
 
 /**Get Comments for a Post */
 export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS";
 
-export const receivePostComments = posts => ({
+export const receivePostComments = comments => ({
     type: RECEIVE_POST_COMMENTS,
-    posts
+    comments
 });
 
 export const getPostComments = (id) => dispatch => (

@@ -22,7 +22,10 @@ class App extends Component {
           <div className="container">
             <Menu />                 
             <Switch>            
-              <Route exact path="/" component={ShowPosts} />            
+              <Route exact path="/" component={ShowPosts} />
+              <Route path="/category/:category" render={({ match }) => (
+                <ShowPosts categoryFilter={match.params.category} />
+              )} />
               <Route path="/post/:id" render={({ match }) => (
                 <Post id={match.params.id} />
               )} />

@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPosts } from '../actions';
+import { getPosts, getPostsByCategory } from '../actions';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 class ShowPosts extends Component {
 
     componentDidMount(){
-        //this.props.getPosts();
+        const { categoryFilter } = this.props;
+        categoryFilter && this.props.getPostsByCategory(categoryFilter);
     }
 
     render() {
-        console.log('this props', JSON.stringify(this.props.posts));
-        console.log('this state', this.state);
+        console.log('ShowPosts this props', JSON.stringify(this.props));
+        console.log('ShowPosts this state', this.state);
 
-        const posts = this.props.posts;
+        let { posts, categoryFilter } = this.props;
 
+        posts && (posts = categoryFilter ? posts.filter((post) => post.category === categoryFilter) : posts);
+        
         return (
             
             <div className="row">
@@ -73,6 +76,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat)),
         getPosts: (data) => dispatch(getPosts(data))
     }
 }

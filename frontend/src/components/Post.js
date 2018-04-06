@@ -14,69 +14,107 @@ class Post extends Component {
         console.log('POST RENDER this props', JSON.stringify(this.props));
         console.log('POST RENDER this state', this.state);
 
-        const post = this.props.post;
+        const { post, comments } = this.props;
 
         return (
                 
             <div className="row">
+
                 <div className="col">
+
+                {post && (
+
                     <div className="list-group">
 
-                        {post && (
-                        
-                            <div className="list-group-item" key={post.id}>
-                                <div className="row">
+                        <div className="list-group-item" key={post.id}>
 
-                                    <div className="col-10">
-                                        <h3 className="mb-1"><strong>{post.title}</strong></h3>
-                                        <h5 className="mb-1">By {post.author} | {moment(post.timestamp).fromNow()} | {post.commentCount} comments</h5>
+                            <div className="row">
 
-                                        <h5>
-                                            <span className="badge badge-pill badge-primary">{post.category}</span>
-                                        </h5>
-                                    </div>
+                                <div className="col-10">
+                                    <h3 className="mb-1"><strong>{post.title}</strong></h3>
+                                    <h5 className="mb-1">By {post.author} | {moment(post.timestamp).fromNow()} | {post.commentCount} comments</h5>
+                                    <h5>
+                                        <span className="badge badge-pill badge-primary">{post.category}</span>
+                                    </h5>
+                                </div>
 
-                                    <div className="col-2">
-                                        <p className="text-right">
-                                            <span className="h3">{post.voteScore}</span>
-                                            <br />
-                                            <span className="h5">
-                                                <i className="fas fa-thumbs-up mr-1"></i>
-                                                <i className="fas fa-thumbs-down"></i>
-                                            </span>
-                                            <br />
-                                            <small className="text-right">Edit | Delete</small>
-                                        </p>
-                                    </div>
+                                <div className="col-2">
+                                    <p className="text-right">
+                                        <span className="h3">{post.voteScore}</span>
+                                        <br />
+                                        <span className="h5">
+                                            <i className="fas fa-thumbs-up mr-1"></i>
+                                            <i className="fas fa-thumbs-down"></i>
+                                        </span>
+                                        <br />
+                                        <small className="text-right">Edit | Delete</small>
+                                    </p>
+                                </div>
 
-                                </div> 
+                            </div> 
 
-                                <hr />
+                            <hr />
 
-                                <div className="row">
-                                    <div className="col">
-                                        {post.body}
-                                    </div>
+                            <div className="row">
+                                <div className="col">
+                                    {post.body}
+                                </div>
+                            </div>
+
+                        </div>
+
+                    {comments && comments.map((comment) => (
+
+                        <div className="list-group-item list-group-item-light" key={comment.id}>
+
+                            <div className="row">
+
+                                <div className="col-10">
+                                    <span>{comment.body}</span>
+                                    <p className="mb-0">
+                                        <small>By {comment.author} | {moment(comment.timestamp).fromNow()}</small>
+                                    </p>
+                                </div>
+
+
+                                <div className="col-2">
+                                    <p className="mb-0" className="text-right">
+                                        <span className="h3">{comment.voteScore}</span>
+                                        <br />
+                                        <span className="h5">
+                                            <i className="fas fa-thumbs-up mr-1"></i>
+                                            <i className="fas fa-thumbs-down"></i>
+                                        </span>
+                                        <br />
+                                        <small className="text-right">Edit | Delete</small>
+                                    </p>
                                 </div>
                                 
-                            </div>    
+                            </div>
+                            
+                        </div>
 
-                        )}
-
+                    ))}
+                        
                     </div> 
+
+                )}
+
                 </div>
+
             </div>                                
         );
     }
 }
 
 function mapStateToProps(state, props) {
-    const { posts } = state;
+    const { posts, comments } = state;
     console.log('POST mapStateToProps state', JSON.stringify(state));
     console.log('POST mapStateToProps props', props);
     //console.log('>>>POST filtered', posts.filter((post) => { return post.id === '8xf0y6ziyjabvozdd253nd' }));
     return {
-        post: posts ? posts.filter((post) => { return post.id === props.id })[0] : ''
+        post: posts ? posts.filter((post) => { return post.id === props.id })[0] : '',
+        comments
     };
 }
 

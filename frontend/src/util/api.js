@@ -20,6 +20,7 @@ export const getPosts = () => {
 };
 
 export const getPostComments = (id) => {
+    console.log('getPostComments id:',id);
     return fetch(
         `http://localhost:3001/posts/${id}/comments`,
         headers
