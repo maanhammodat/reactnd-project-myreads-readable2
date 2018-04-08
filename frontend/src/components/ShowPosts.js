@@ -18,6 +18,8 @@ class ShowPosts extends Component {
         let { posts, categoryFilter } = this.props;
 
         posts && (posts = categoryFilter ? posts.filter((post) => post.category === categoryFilter) : posts);
+
+        //reorderPosts && posts.sort((a, b) => a.timestamp - b.timestamp);
         
         return (
             

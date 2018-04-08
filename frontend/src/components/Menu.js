@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { reorderPosts, getPostsByCategory } from '../actions';
+import { NavLink, withRouter } from 'react-router-dom';
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -8,20 +9,27 @@ function capitalizeFirstLetter(string) {
 
 class Menu extends Component {
 
-    componentDidMount(){
-        //this.props.getCategories();
+    filterCategories(cat){
+        this.props.getPostsByCategory(cat);
     }
 
     render() {
-        console.log('MENU this props', JSON.stringify(this.props));
-        console.log('MENU this state', this.state);
+        console.log('222MENU this props', this.props);
+        console.log('333MENU this state', this.state);
         const { categories } = this.props;
 
         let cats = categories && categories.map((cat=>{
-            return <Link to={`/category/${cat.path}`} key={cat.name} className="dropdown-item">{capitalizeFirstLetter(cat.name)}</Link>
+            return <NavLink onClick={() => this.filterCategories(cat.path)} exact to={`/category/${cat.path}`} key={cat.name} activeClassName="active" className="dropdown-item">{capitalizeFirstLetter(cat.name)}</NavLink>
         }))
 
+        
+        let { categoryFilter } = this.props;
+        console.log('333MENU CAT FILTER:', categoryFilter);
+        let catLabel = 'Categories';        
+        catLabel = categoryFilter ? capitalizeFirstLetter(categoryFilter) : catLabel;
+
         console.log('MENU categories',categories);
+
         return (
             
             <div className="row pb-2">
@@ -34,11 +42,11 @@ class Menu extends Component {
 
                         <div className="collapse navbar-collapse" id="navbarColor01">
                             <ul className="navbar-nav mr-auto">
-                                <li className="nav-item active">
-                                    <Link to="/" className="nav-link">All</Link>
+                                <li className="nav-item">
+                                    <NavLink onClick={() => this.filterCategories()} exact to="/" activeClassName="active" className="nav-link">All</NavLink>
                                 </li>
                                 <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+                                    <a className={`nav-link dropdown-toggle${categoryFilter && ' active'}`} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{catLabel}</a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                         {cats}                                        
                                     </div>
@@ -54,8 +62,10 @@ class Menu extends Component {
                         <div className="dropdown">
                             <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort Posts By</button>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item">Date</a>
-                                <a className="dropdown-item">Score</a>
+                                <a className="dropdown-item">Date: Newest</a>
+                                <a className="dropdown-item">Date: Oldest</a>                                
+                                <a className="dropdown-item">Score: Highest</a>
+                                <a className="dropdown-item">Score: Lowest</a>                                
                             </div>
                         </div>
                     </nav>
@@ -66,22 +76,24 @@ class Menu extends Component {
 }
 
 function mapStateToProps(state, props) {
-    const { categories } = state;
-    console.log('MENU mapStateToProps state', state);
-    console.log('MENU mapStateToProps props', props);
+    const { categories, categoryFilter } = state;
+    console.log('111MENU mapStateToProps state', state);
+    console.log('111MENU mapStateToProps props', props);
 
     return {
-        categories: categories ? categories : ''
+        categories: categories ? categories : '',
+        categoryFilter: categoryFilter ? categoryFilter : ''
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        //getCategories: (data) => dispatch(getCategories(data))
+        reorderPosts: (data) => dispatch(reorderPosts(data)),
+        getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat))
     }
 }
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Menu)
+)(Menu))

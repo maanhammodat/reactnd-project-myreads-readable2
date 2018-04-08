@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
 
 import {
-    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, GET_POST, GET_POSTS_BY_CATEGORY
+    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, GET_POST, GET_POSTS_BY_CATEGORY, REORDER_POSTS
 } from '../actions';
 
 const initialState = {
-    categoryFilter: ''
+    categoryFilter: '',
+    reorderPosts: ''
 };
 
 function posts(state = initialState, action) {
@@ -46,6 +47,15 @@ function posts(state = initialState, action) {
             return {
                 ...state,
                 categoryFilter: category
+            }
+        
+        case REORDER_POSTS:
+            const { order } = action
+            console.log('ORDER_POSTS', order);
+
+            return {
+                ...state,
+                reorderPosts: order
             }
         
         case RECEIVE_POST_COMMENTS:

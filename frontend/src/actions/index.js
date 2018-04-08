@@ -2,7 +2,7 @@ import * as APIUtil from '../util/api';
 
 
 /**Get Categories */
-export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
+export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 
 export const receiveCategories = categories => ({
     type: RECEIVE_CATEGORIES,
@@ -17,7 +17,7 @@ export const getCategories = () => dispatch => (
 
 
 /**Get All Posts */
-export const RECEIVE_POSTS = "RECEIVE_POSTS";
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 export const receivePosts = posts => ({
     type: RECEIVE_POSTS,
@@ -43,6 +43,18 @@ export function getPostsByCategory( category ) {
 }
 
 
+/**Reorder Posts */
+export const REORDER_POSTS = 'REORDER_POSTS';
+
+export function reorderPosts(order) {
+    console.log('ACTION reorderPosts:', order);
+    return {
+        type: REORDER_POSTS,
+        order
+    }
+}
+
+
 /**Get a Post */
 export const GET_POST = 'GET_POST';
 
@@ -54,7 +66,7 @@ export function getPost({ id }) {
 }
 
 /**Get Comments for a Post */
-export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS";
+export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
 
 export const receivePostComments = comments => ({
     type: RECEIVE_POST_COMMENTS,
