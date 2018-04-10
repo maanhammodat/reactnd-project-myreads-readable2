@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPosts, getPostsByCategory } from '../actions';
+import { getPosts, reorderPosts, getPostsByCategory } from '../actions';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -11,15 +11,42 @@ class ShowPosts extends Component {
         categoryFilter && this.props.getPostsByCategory(categoryFilter);
     }
 
+    organisePosts(posts){
+
+        let { categoryFilter, postOrder } = this.props;
+        console.log('7770Org posts',categoryFilter, postOrder);
+
+        posts = categoryFilter ? posts.filter((post) => post.category === categoryFilter) : posts;
+
+        switch (postOrder) {
+            case 'newest':
+                posts.sort((a, b) => a.timestamp - b.timestamp);
+                break;
+
+            case 'oldest':
+                posts.sort((a, b) => b.timestamp - a.timestamp);
+                break;
+
+            case 'highest':
+                posts.sort((a, b) => b.voteScore - a.voteScore);
+                break;
+
+            case 'lowest':
+                posts.sort((a, b) => a.voteScore - b.voteScore);
+                break;
+        }
+        console.log('7770Org posts', posts);
+        return posts;
+    }
+
     render() {
-        console.log('ShowPosts this props', JSON.stringify(this.props));
-        console.log('ShowPosts this state', this.state);
+        console.log('123ShowPosts this props', JSON.stringify(this.props));
+        console.log('123ShowPosts this state', this.state);
 
-        let { posts, categoryFilter } = this.props;
+        let { posts } = this.props;
 
-        posts && (posts = categoryFilter ? posts.filter((post) => post.category === categoryFilter) : posts);
-
-        //reorderPosts && posts.sort((a, b) => a.timestamp - b.timestamp);
+        posts = posts ? this.organisePosts(posts) : '';
+        
         
         return (
             
@@ -67,19 +94,21 @@ class ShowPosts extends Component {
 }
 
 function mapStateToProps(state, props) {
-    const { posts } = state;
-    console.log('mapStateToProps state', JSON.stringify(state));
-    console.log('mapStateToProps props', props);
+    const { posts, postOrder } = state;
+    console.log('SHOWPOSTS mapStateToProps state', JSON.stringify(state));
+    console.log('SHOWPOSTS mapStateToProps props', props);
 
     return {
-        posts: posts ? posts : ''
+        posts,
+        postOrder
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat)),
-        getPosts: (data) => dispatch(getPosts(data))
+        getPosts: (data) => dispatch(getPosts(data)),
+        reorderPosts: (data) => dispatch(reorderPosts(data)),
+        getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat))        
     }
 }
 

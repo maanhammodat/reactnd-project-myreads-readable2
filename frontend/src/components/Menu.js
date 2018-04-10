@@ -9,8 +9,20 @@ function capitalizeFirstLetter(string) {
 
 class Menu extends Component {
 
+    constructor() {
+        super();
+
+        //Bind the following functions to the class to avoid collisions with `this`
+        this.orderPostsBy = this.orderPostsBy.bind(this);
+    }
+
     filterCategories(cat){
         this.props.getPostsByCategory(cat);
+    }
+
+    orderPostsBy(e) {
+        let order = e.target.value;
+        this.props.reorderPosts(order);
     }
 
     render() {
@@ -23,7 +35,7 @@ class Menu extends Component {
         }))
 
         
-        let { categoryFilter } = this.props;
+        let { categoryFilter, postOrder } = this.props;
         console.log('333MENU CAT FILTER:', categoryFilter);
         let catLabel = 'Categories';        
         catLabel = categoryFilter ? capitalizeFirstLetter(categoryFilter) : catLabel;
@@ -59,15 +71,17 @@ class Menu extends Component {
 
                         </div>
 
-                        <div className="dropdown">
-                            <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort Posts By</button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item">Date: Newest</a>
-                                <a className="dropdown-item">Date: Oldest</a>                                
-                                <a className="dropdown-item">Score: Highest</a>
-                                <a className="dropdown-item">Score: Lowest</a>                                
-                            </div>
+                        <span className="nav-item nav-link disabled">Sort By:</span>
+
+                        <div className="col-2 pl-0 pr-0">
+                            <select value={postOrder} onChange={this.orderPostsBy} className="form-control form-control-sm" id="exampleSelect1">                                
+                                <option value="newest">Date: Newest</option>
+                                <option value="oldest">Date: Oldest</option>
+                                <option value="highest">Score: Highest</option>
+                                <option value="lowest">Score: Lowest</option>
+                            </select>
                         </div>
+
                     </nav>
                 </div>
             </div>                             
@@ -76,13 +90,14 @@ class Menu extends Component {
 }
 
 function mapStateToProps(state, props) {
-    const { categories, categoryFilter } = state;
+    const { categories, categoryFilter, postOrder } = state;
     console.log('111MENU mapStateToProps state', state);
     console.log('111MENU mapStateToProps props', props);
 
     return {
-        categories: categories ? categories : '',
-        categoryFilter: categoryFilter ? categoryFilter : ''
+        categories,
+        categoryFilter,
+        postOrder
     };
 }
 

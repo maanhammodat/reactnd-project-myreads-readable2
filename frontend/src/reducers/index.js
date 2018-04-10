@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     categoryFilter: '',
-    reorderPosts: ''
+    postOrder: 'newest'
 };
 
 function posts(state = initialState, action) {
@@ -55,7 +55,7 @@ function posts(state = initialState, action) {
 
             return {
                 ...state,
-                reorderPosts: order
+                postOrder: order
             }
         
         case RECEIVE_POST_COMMENTS:
