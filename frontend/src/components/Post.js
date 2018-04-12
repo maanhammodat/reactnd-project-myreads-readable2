@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPost, getPostComments } from '../actions';
+import { getPost, getPostComments, votePost } from '../actions';
 import moment from 'moment';
 
 class Post extends Component {
 
     componentDidMount(){        
         console.log('POST DIDMOUNT, ID:',this.props.id);
-        this.props.getPostComments(this.props.id);
+        this.props.getPostComments(this.props.id);        
     }
 
     render() {
         console.log('POST RENDER this props', JSON.stringify(this.props));
         console.log('POST RENDER this state', this.state);
 
-        const { post, comments } = this.props;
+        const { post, comments, votePost } = this.props;
 
         return (
                 
@@ -43,8 +43,9 @@ class Post extends Component {
                                         <span className="h3">{post.voteScore}</span>
                                         <br />
                                         <span className="h5">
-                                            <i className="fas fa-thumbs-up mr-1"></i>
-                                            <i className="fas fa-thumbs-down"></i>
+                                            <span onClick={() => votePost(post.id, 'upVote')}><i className="fas fa-thumbs-up mr-1"></i></span>
+                                            
+                                            <span onClick={() => votePost(post.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
                                         </span>
                                         <br />
                                         <small className="text-right">Edit | Delete</small>
@@ -120,7 +121,11 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getPostComments: (data) => dispatch(getPostComments(data))
+        getPostComments: (data) => dispatch(getPostComments(data)),
+        votePost: (id, post) => {
+            console.log('VOTEPOST',id, post);
+            dispatch(votePost(id, post))
+        }
     }
 }
 

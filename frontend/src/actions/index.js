@@ -80,6 +80,21 @@ export const getPostComments = (id) => dispatch => (
 );
 
 
+/**Vote on a Post */
+export const UPDATE_POST_SCORE = 'UPDATE_POST_SCORE';
+
+export const updatePostScore = post => ({
+    type: UPDATE_POST_SCORE,
+    post
+});
+
+export const votePost = (id, vote) => dispatch => (
+    APIUtil.votePost(id, vote)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => dispatch(updatePostScore(data)))
+);
+
+
 /**Add Posts */
 export const ADD_POST = 'ADD_POST';
 

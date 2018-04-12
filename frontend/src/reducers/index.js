@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import {
-    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, GET_POST, GET_POSTS_BY_CATEGORY, REORDER_POSTS
+    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, GET_POST, GET_POSTS_BY_CATEGORY, REORDER_POSTS, UPDATE_POST_SCORE
 } from '../actions';
 
 const initialState = {
@@ -65,6 +65,14 @@ function posts(state = initialState, action) {
             return {
                 ...state,
                 comments
+            }
+
+        case UPDATE_POST_SCORE:
+            console.log('UPDATE_POST_SCORE', action.post.id, action.post.voteScore);
+            console.log('state,',JSON.stringify(state));
+            return {
+                ...state,
+                posts: state.posts.filter((p) => p.id !== action.post.id).concat(action.post)
             }
                        
         case RECEIVE_CATEGORIES:

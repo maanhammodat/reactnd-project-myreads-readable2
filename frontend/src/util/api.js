@@ -26,3 +26,15 @@ export const getPostComments = (id) => {
         headers
     );
 }
+
+export const votePost = (id, vote) => {
+    console.log(`votePost post: ${id} vote: ${vote}`);
+    return fetch(
+        `http://localhost:3001/posts/${id}`,
+        {
+            ...headers,
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({option: vote}) // must match 'Content-Type' header
+        }
+    )
+}
