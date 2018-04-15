@@ -47,7 +47,9 @@ class Menu extends Component {
             <div className="row pb-2">
                 <div className="col">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-                        <span className="navbar-brand">Readable</span>
+
+                        <NavLink to="/"><span className="navbar-brand">Readable</span></NavLink>
+                        
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>

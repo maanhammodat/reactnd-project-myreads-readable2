@@ -38,3 +38,27 @@ export const votePost = (id, vote) => {
         }
     )
 }
+
+export const voteComment = (id, vote) => {
+    console.log(`voteComment comment: ${id} vote: ${vote}`);
+    return fetch(
+        `http://localhost:3001/comments/${id}`,
+        {
+            ...headers,
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({ option: vote }) // must match 'Content-Type' header
+        }
+    )
+}
+
+export const postComment = (comment) => {
+    console.log(`postComment comment: ${comment}`);
+    return fetch(
+        `http://localhost:3001/comments`,
+        {
+            ...headers,
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            body: comment // must match 'Content-Type' header
+        }
+    )
+}

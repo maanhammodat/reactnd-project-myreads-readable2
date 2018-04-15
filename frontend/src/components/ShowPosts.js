@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPosts, reorderPosts, getPostsByCategory } from '../actions';
+import { getPosts, reorderPosts, getPostsByCategory, votePost } from '../actions';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -43,7 +43,7 @@ class ShowPosts extends Component {
         console.log('123ShowPosts this props', JSON.stringify(this.props));
         console.log('123ShowPosts this state', this.state);
 
-        let { posts } = this.props;
+        let { posts, votePost } = this.props;
 
         posts = posts ? this.organisePosts(posts) : '';
         
@@ -74,8 +74,9 @@ class ShowPosts extends Component {
                                         <span className="h3">{post.voteScore}</span>
                                         <br />
                                         <span className="h5">
-                                            <i className="fas fa-thumbs-up mr-1"></i>
-                                            <i className="fas fa-thumbs-down"></i>
+                                            <span onClick={() => votePost(post.id, 'upVote')}><i className="fas fa-thumbs-up mr-1"></i></span>
+                                            
+                                            <span onClick={() => votePost(post.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
                                         </span>
                                         <br />
                                         <small className="text-right">Edit | Delete</small>
@@ -108,7 +109,8 @@ function mapDispatchToProps(dispatch) {
     return {
         getPosts: (data) => dispatch(getPosts(data)),
         reorderPosts: (data) => dispatch(reorderPosts(data)),
-        getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat))        
+        getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat)),
+        votePost: (id, post) => dispatch(votePost(id, post))       
     }
 }
 

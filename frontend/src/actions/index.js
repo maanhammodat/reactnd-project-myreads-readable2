@@ -95,6 +95,41 @@ export const votePost = (id, vote) => dispatch => (
 );
 
 
+/**Vote on a Comment */
+export const UPDATE_COMMENT_SCORE = 'UPDATE_COMMENT_SCORE';
+
+export const updateCommentScore = comment => ({
+    type: UPDATE_COMMENT_SCORE,
+    comment
+});
+
+export const voteComment = (id, vote) => dispatch => (
+    APIUtil.voteComment(id, vote)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => dispatch(updateCommentScore(data)))
+);
+
+
+/**Add Comment */
+export const ADD_COMMENT = 'ADD_COMMENT';
+
+export function addComment({ comment }) {
+    return {
+        type: ADD_COMMENT,
+        comment
+    }
+}
+
+export const postComment = (comment) => dispatch => (
+    APIUtil.postComment(comment)
+        .then((res) => {
+            !res.ok && console.log('postComment Error',res.statusText);
+            res.ok && dispatch(addComment(comment));
+            res.json()
+        })
+);
+
+
 /**Add Posts */
 export const ADD_POST = 'ADD_POST';
 
