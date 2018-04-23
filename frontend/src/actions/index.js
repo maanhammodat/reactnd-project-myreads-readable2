@@ -105,7 +105,7 @@ export const updateCommentScore = comment => ({
 
 export const voteComment = (id, vote) => dispatch => (
     APIUtil.voteComment(id, vote)
-        .then((resp) => resp.json()) // Transform the data into json
+        .then((res) => res.json()) // Transform the data into json
         .then(data => dispatch(updateCommentScore(data)))
 );
 
@@ -113,7 +113,8 @@ export const voteComment = (id, vote) => dispatch => (
 /**Add Comment */
 export const ADD_COMMENT = 'ADD_COMMENT';
 
-export function addComment({ comment }) {
+export function addComment( comment ) {
+    console.log('addComment',comment);
     return {
         type: ADD_COMMENT,
         comment
@@ -122,10 +123,10 @@ export function addComment({ comment }) {
 
 export const postComment = (comment) => dispatch => (
     APIUtil.postComment(comment)
-        .then((res) => {
-            !res.ok && console.log('postComment Error',res.statusText);
-            res.ok && dispatch(addComment(comment));
-            res.json()
+        .then((res) => res.json()) // Transform the data into json
+        .then(data => {
+            console.log('postComment data',data);
+            dispatch(addComment(data))
         })
 );
 

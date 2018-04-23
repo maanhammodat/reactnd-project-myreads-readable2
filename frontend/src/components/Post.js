@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPost, getPostComments, votePost, voteComment, postComment } from '../actions';
+import Comment from './Comment';
 import moment from 'moment';
 import * as uuid from '../util/uuid';
 
@@ -26,23 +27,6 @@ class Post extends Component {
         }
         console.log('778 data',data);
         this.submitComment(data);
-
-        // let comment = JSON.stringify({ "author": "blahhh", "body": "haaa", "id": "76a-4971-4ba-96ef-7ac6545a9137", "parentId": "8xf0y6ziyjabvozdd253nd", "timestamp": 1523788914591 })
-
-        // fetch(
-        //     `http://localhost:3001/comments`,
-        //     {
-        //         headers: {
-        //             'Authorization': 'whatever-you-want',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        //         body: comment // must match 'Content-Type' header
-        //     }
-        // ).then((resp) => {
-        //     console.log('778r',resp);
-        // })
-
     }
 
     submitComment(comment){
@@ -115,39 +99,18 @@ class Post extends Component {
 
                         </div>
 
-                    {/* {comments && comments.map((comment) => (
+                    {comments && comments.map((comment) => (
+                        
+                        <Comment
+                            key={comment.id}
+                            id={comment.id}
+                            body={comment.body}
+                            author={comment.author}
+                            timestamp={comment.timestamp}
+                            voteScore={comment.voteScore}
+                        />
 
-                        <div className="list-group-item list-group-item-light" key={comment.id}>
-
-                            <div className="row">
-
-                                <div className="col-10">
-                                    <span>{comment.body}</span>
-                                    <p className="mb-0">
-                                        <small>By {comment.author} | {moment(comment.timestamp).fromNow()}</small>
-                                    </p>
-                                </div>
-
-
-                                <div className="col-2">
-                                    <p className="mb-0" className="text-right">
-                                        <span className="h3">{comment.voteScore}</span>
-                                        <br />
-                                        <span className="h5">
-                                            <span onClick={() => voteComment(comment.id, 'upVote')}><i className="fas fa-thumbs-up mr-1"></i></span>
-                                            
-                                            <span onClick={() => voteComment(comment.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
-                                        </span>
-                                        <br />
-                                        <small className="text-right">Edit | Delete</small>
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-
-                    ))} */}
+                    ))}
                         
                     </div>
 
@@ -174,7 +137,7 @@ class Post extends Component {
 
                                     <div className="form-group">
                                         <label htmlFor="text">Text</label>
-                                        <textarea className="form-control" name="body" id="body" rows="3"></textarea>
+                                        <textarea className="form-control" name="body" id="body" rows="3" placeholder="Enter Text"></textarea>
                                     </div>
 
                                     <button type="submit" className="btn btn-primary">Submit</button>
