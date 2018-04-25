@@ -29,6 +29,7 @@ class App extends Component {
               <Route path="/post/:id" render={({ match }) => (
                 <Post id={match.params.id} />
               )} />
+              <Route exact path="/add-post" component={AddPost} />
             </Switch>
           </div>
         </Router>

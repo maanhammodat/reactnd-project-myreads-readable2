@@ -20,11 +20,11 @@ class ShowPosts extends Component {
 
         switch (postOrder) {
             case 'newest':
-                posts.sort((a, b) => a.timestamp - b.timestamp);
+                posts.sort((a, b) => b.timestamp - a.timestamp);
                 break;
 
             case 'oldest':
-                posts.sort((a, b) => b.timestamp - a.timestamp);
+                posts.sort((a, b) => a.timestamp - b.timestamp);
                 break;
 
             case 'highest':
@@ -78,8 +78,6 @@ class ShowPosts extends Component {
                                             
                                             <span onClick={() => votePost(post.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
                                         </span>
-                                        <br />
-                                        <small className="text-right">Edit | Delete</small>
                                     </p>
                                 </div>
 

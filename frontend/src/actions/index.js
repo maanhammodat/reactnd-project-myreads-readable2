@@ -19,15 +19,32 @@ export const getCategories = () => dispatch => (
 /**Get All Posts */
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
-export const receivePosts = posts => ({
-    type: RECEIVE_POSTS,
-    posts
-});
+export function receivePosts(posts){
+    return {
+        type: RECEIVE_POSTS,
+        posts
+    }
+};
 
 export const getPosts = () => dispatch => (
     APIUtil.getPosts()
         .then((resp) => resp.json()) // Transform the data into json
         .then(data => dispatch(receivePosts(data)))
+);
+
+
+/**Get a Post */
+export const RECEIVE_POST = 'RECEIVE_POST';
+
+export const receivePost = post => ({
+    type: RECEIVE_POST,
+    post
+});
+
+export const getPost = (id) => dispatch => (
+    APIUtil.getPost(id)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => dispatch(receivePost(data)))
 );
 
 
@@ -55,28 +72,24 @@ export function reorderPosts(order) {
 }
 
 
-/**Get a Post */
-export const GET_POST = 'GET_POST';
+/**Add Post */
+export const ADD_POST = 'ADD_POST';
 
-export function getPost({ id }) {
+export function addPost(post) {
+    console.log('addPost', post);
     return {
-        type: GET_POST,
-        id
+        type: ADD_POST,
+        post
     }
 }
 
-/**Get Comments for a Post */
-export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
-
-export const receivePostComments = comments => ({
-    type: RECEIVE_POST_COMMENTS,
-    comments
-});
-
-export const getPostComments = (id) => dispatch => (
-    APIUtil.getPostComments(id)
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(data => dispatch(receivePostComments(data)))
+export const createPost = (post) => dispatch => (
+    APIUtil.createPost(post)
+        .then((res) => res.json()) // Transform the data into json
+        .then(data => {
+            console.log('createPost data', data);
+            dispatch(addPost(data))
+        })
 );
 
 
@@ -95,18 +108,48 @@ export const votePost = (id, vote) => dispatch => (
 );
 
 
-/**Vote on a Comment */
-export const UPDATE_COMMENT_SCORE = 'UPDATE_COMMENT_SCORE';
+/**Get Comments for a Post */
+export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
 
-export const updateCommentScore = comment => ({
-    type: UPDATE_COMMENT_SCORE,
-    comment
+export const receivePostComments = comments => ({
+    type: RECEIVE_POST_COMMENTS,
+    comments
 });
 
-export const voteComment = (id, vote) => dispatch => (
-    APIUtil.voteComment(id, vote)
+export const getPostComments = (id) => dispatch => (
+    APIUtil.getPostComments(id)
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => dispatch(receivePostComments(data)))
+);
+
+
+/**Update a Post */
+export const UPDATE_POST = 'UPDATE_POST';
+
+export const updatePost = post => ({
+    type: UPDATE_POST,
+    post
+});
+
+export const editPost = (post) => dispatch => (
+    APIUtil.editPost(post)
         .then((res) => res.json()) // Transform the data into json
-        .then(data => dispatch(updateCommentScore(data)))
+        .then(data => dispatch(updatePost(data)))
+);
+
+
+/**Delete a Post */
+export const REMOVE_POST = 'REMOVE_POST';
+
+export const removePost = post => ({
+    type: REMOVE_POST,
+    post
+});
+
+export const deletePost = (id) => dispatch => (
+    APIUtil.deletePost(id)
+        .then((res) => res.json()) // Transform the data into json
+        .then(data => dispatch(removePost(data)))
 );
 
 
@@ -126,23 +169,51 @@ export const postComment = (comment) => dispatch => (
         .then((res) => res.json()) // Transform the data into json
         .then(data => {
             console.log('postComment data',data);
-            dispatch(addComment(data))
+            dispatch(addComment(data));
         })
 );
 
 
-/**Add Posts */
-export const ADD_POST = 'ADD_POST';
+/**Update a Comment */
+export const UPDATE_COMMENT_TEXT = 'UPDATE_COMMENT_TEXT';
 
-let nextId = 1;
+export const updateCommentText = comment => ({
+    type: UPDATE_COMMENT_TEXT,
+    comment
+});
 
-export function addPost({ title, user, category, text }) {
-    return {
-        type: ADD_POST,
-        id: nextId++,
-        title,
-        user,
-        category,
-        text
-    }
-}
+export const updateComment = (comment) => dispatch => (
+    APIUtil.updateComment(comment)
+        .then((res) => res.json()) // Transform the data into json
+        .then(data => dispatch(updateCommentText(data)))
+);
+
+
+/**Vote on a Comment */
+export const UPDATE_COMMENT_SCORE = 'UPDATE_COMMENT_SCORE';
+
+export const updateCommentScore = comment => ({
+    type: UPDATE_COMMENT_SCORE,
+    comment
+});
+
+export const voteComment = (id, vote) => dispatch => (
+    APIUtil.voteComment(id, vote)
+        .then((res) => res.json()) // Transform the data into json
+        .then(data => dispatch(updateCommentScore(data)))
+);
+
+
+/**Delete a Comment */
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
+
+export const removeComment = comment => ({
+    type: REMOVE_COMMENT,
+    comment
+});
+
+export const deleteComment = (id) => dispatch => (
+    APIUtil.deleteComment(id)
+        .then((res) => res.json()) // Transform the data into json
+        .then(data => dispatch(removeComment(data)))
+);

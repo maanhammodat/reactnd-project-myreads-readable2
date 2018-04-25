@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import {
-    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, GET_POST, GET_POSTS_BY_CATEGORY, REORDER_POSTS, UPDATE_POST_SCORE, UPDATE_COMMENT_SCORE, ADD_COMMENT
+    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, RECEIVE_POST, GET_POSTS_BY_CATEGORY, REORDER_POSTS, UPDATE_POST_SCORE, UPDATE_COMMENT_SCORE, UPDATE_COMMENT_TEXT, ADD_COMMENT, REMOVE_COMMENT, UPDATE_POST, REMOVE_POST
 } from '../actions';
 
 const initialState = {
@@ -12,24 +12,27 @@ const initialState = {
 function posts(state = initialState, action) {
     switch (action.type) {
 
-        case GET_POST:
-            const { id } = action
-            console.log('RECEIVE_POSTS', JSON.stringify(state.posts));
+        case RECEIVE_POST:
+            console.log('RECEIVE_POST', action.post);
 
             return {
-                ...state
+                ...state,
+                post: action.post
             }
             
         case ADD_POST:
-            const { title, pid } = action
-
-            return [
+            console.log('ADD_POST', action.post);
+            return {
                 ...state,
-                {
-                    title,
-                    pid
-                }
-            ]
+                posts: [...state.posts, action.post]
+            }
+        
+        case UPDATE_POST:
+            console.log('UPDATE_POST', action.post);
+            return {
+                ...state,
+                post: action.post
+            }
 
         case RECEIVE_POSTS:
             const { posts } = action
@@ -75,9 +78,24 @@ function posts(state = initialState, action) {
                 posts: state.posts.filter((p) => p.id !== action.post.id).concat(action.post)
             }
 
+        case REMOVE_POST:
+            console.log('REMOVE_POST', action.post.id);
+            return {
+                ...state,
+                posts: state.posts.filter((p) => p.id !== action.post.id),
+                post: ''
+            }
+
         case UPDATE_COMMENT_SCORE:
             console.log('UPDATE_COMMENT_SCORE', action.comment.id, action.comment.voteScore);
             console.log('state,', JSON.stringify(state));
+            return {
+                ...state,
+                comments: state.comments.filter((c) => c.id !== action.comment.id).concat(action.comment)
+            }
+        
+        case UPDATE_COMMENT_TEXT:
+            console.log('UPDATE_COMMENT_TEXT', action.comment.id);
             return {
                 ...state,
                 comments: state.comments.filter((c) => c.id !== action.comment.id).concat(action.comment)
@@ -88,6 +106,13 @@ function posts(state = initialState, action) {
             return {
                 ...state,
                 comments: [...state.comments, action.comment]
+            }
+
+        case REMOVE_COMMENT:
+            console.log('REMOVE_COMMENT', action.comment.id);
+            return {
+                ...state,
+                comments: state.comments.filter((c) => c.id !== action.comment.id)
             }
                        
         case RECEIVE_CATEGORIES:

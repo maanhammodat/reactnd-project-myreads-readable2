@@ -66,7 +66,7 @@ class Menu extends Component {
                                     </div>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link">Add Post</a>
+                                    <NavLink exact to="/add-post" key="add-post" activeClassName="active" className="nav-link">Add Post</NavLink>
                                 </li>
                             </ul>
 

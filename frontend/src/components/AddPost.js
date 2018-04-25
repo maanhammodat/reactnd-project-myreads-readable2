@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addPost } from '../actions';
+import { createPost } from '../actions';
+import * as uuid from '../util/uuid';
 
 class AddPost extends Component {
     
@@ -9,37 +10,36 @@ class AddPost extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-
     handleSubmit(event) {
         event.preventDefault();
-        
-        fetch(
-            'http://localhost:3001/posts',
-            {
-                headers: { 
-                    'Authorization': 'whatever-you-want'
-                }
-            }
-        ).then((resp) => resp) // Transform the data into json
-        .then(function (data) {
-            console.log('data',data);
-        });
-        
-        
-        // const form = event.target;
-        // const data = {}
-        // for (let element of form.elements) {
-        //     console.log('element.tagName', element.tagName);
-        //     console.log('element.name', element.name);
-        //     if (element.tagName === 'BUTTON') { continue; }
-        //     data[element.name] = element.value;
-        // }
-        // console.log('data',data);
+        const form = event.target;
+        const data = {}
+        for (let element of form.elements) {
+            if (element.tagName === 'BUTTON') { continue; }
+            data[element.name] = element.value;
+        }
+        console.log('778 data', data);
+        this.submitPost(data);
+        form.reset();
+    }
+
+    submitPost(post) {
+        post.id = uuid.generate();
+        post.parentId = this.props.id;
+        post.timestamp = Date.now();
+        console.log('778 post is ', JSON.stringify(post));
+
+        this.props.createPost(JSON.stringify(post));
     }
 
     render() {
-        console.log('this props', this.props);
-        console.log('this state', this.state);
+        
+        const { categories } = this.props;
+
+        let cats = categories && categories.map((cat => {
+            return <option key={cat.name}>{cat.name}</option>
+        }))
+
         return (
             
             <div className="row">
@@ -49,33 +49,25 @@ class AddPost extends Component {
                         <form onSubmit={this.handleSubmit}>
                             
                             <div className="form-group">
-                                <label>Title
-                                <input type="text" className="form-control" id="postTitle" name="postTitle" aria-describedby="titleHelp" placeholder="Enter Title"/>
-                                </label>
+                                <label>Title</label>
+                                <input type="text" className="form-control" id="title" name="title" placeholder="Enter Title"/>
                             </div>
 
                             <div className="form-group">
-                                <label>User
-                                <input type="text" className="form-control" id="postUser" name="postUser" aria-describedby="UserHelp" placeholder="Enter User"/>
-                                </label>
+                                <label>Author</label>
+                                <input type="text" className="form-control" id="author" name="author" placeholder="Enter Author"/>
                             </div>
 
                             <div className="form-group">
-                                <label>Select Category
-                                <select className="form-control" id="categorySelect" name="categorySelect">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                <label>Select Category</label>
+                                <select className="form-control" id="category" name="category">
+                                    {cats}
                                 </select>
-                                </label>
                             </div>
 
                             <div className="form-group">
-                                <label>Enter Text
-                                <textarea className="form-control" id="postText" name="postText" rows="3"></textarea>
-                                </label>
+                                <label>Enter Text</label>
+                                <textarea className="form-control" id="body" name="body" rows="3"></textarea>
                             </div>
 
                             <button type="submit" className="btn btn-primary">Submit</button>
@@ -90,15 +82,17 @@ class AddPost extends Component {
 }
 
 function mapStateToProps(state, props) {
-    console.log('mapStateToProps state', JSON.stringify(state));
-    console.log('mapStateToProps props', props);
 
-    return { pawsts: state }
+    const { categories } = state;
+
+    return {
+        categories
+    }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        addPost: (data) => dispatch(addPost(data))
+        createPost: (data) => dispatch(createPost(data))
     }
 }
 
