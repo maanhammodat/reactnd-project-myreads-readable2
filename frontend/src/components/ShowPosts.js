@@ -7,6 +7,8 @@ import moment from 'moment';
 class ShowPosts extends Component {
 
     componentDidMount(){
+        console.log('989 didmount');
+        this.props.getPosts();
         const { categoryFilter } = this.props;
         categoryFilter && this.props.getPostsByCategory(categoryFilter);
     }
@@ -108,7 +110,7 @@ function mapDispatchToProps(dispatch) {
         getPosts: (data) => dispatch(getPosts(data)),
         reorderPosts: (data) => dispatch(reorderPosts(data)),
         getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat)),
-        votePost: (id, post) => dispatch(votePost(id, post))       
+        votePost: (id, post) => dispatch(votePost(id, post))
     }
 }
 

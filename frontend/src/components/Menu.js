@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reorderPosts, getPostsByCategory } from '../actions';
+import { getCategories, reorderPosts, getPostsByCategory } from '../actions';
 import { NavLink, withRouter } from 'react-router-dom';
 
 function capitalizeFirstLetter(string) {
@@ -11,9 +11,11 @@ class Menu extends Component {
 
     constructor() {
         super();
-
-        //Bind the following functions to the class to avoid collisions with `this`
         this.orderPostsBy = this.orderPostsBy.bind(this);
+    }
+
+    componentDidMount(){
+        this.props.getCategories();
     }
 
     filterCategories(cat){
@@ -48,7 +50,7 @@ class Menu extends Component {
                 <div className="col">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
 
-                        <NavLink to="/"><span className="navbar-brand">Readable</span></NavLink>
+                        <NavLink onClick={() => this.filterCategories()} to="/"><span className="navbar-brand">Readable</span></NavLink>
                         
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
@@ -66,7 +68,7 @@ class Menu extends Component {
                                     </div>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink exact to="/add-post" key="add-post" activeClassName="active" className="nav-link">Add Post</NavLink>
+                                    <NavLink onClick={() => this.filterCategories()} exact to="/add-post" key="add-post" activeClassName="active" className="nav-link">Add Post</NavLink>
                                 </li>
                             </ul>
 
@@ -105,6 +107,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        getCategories: (data) => dispatch(getCategories(data)),
         reorderPosts: (data) => dispatch(reorderPosts(data)),
         getPostsByCategory: (cat) => dispatch(getPostsByCategory(cat))
     }

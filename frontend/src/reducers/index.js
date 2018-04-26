@@ -6,7 +6,8 @@ import {
 
 const initialState = {
     categoryFilter: '',
-    postOrder: 'newest'
+    postOrder: 'newest',
+    addedPost: false
 };
 
 function posts(state = initialState, action) {
@@ -24,7 +25,8 @@ function posts(state = initialState, action) {
             console.log('ADD_POST', action.post);
             return {
                 ...state,
-                posts: [...state.posts, action.post]
+                posts: [...state.posts, action.post],
+                addedPost: true
             }
         
         case UPDATE_POST:
@@ -40,7 +42,8 @@ function posts(state = initialState, action) {
 
             return {
                 ...state,
-                posts            
+                posts,
+                addedPost: false
             }
         
         case GET_POSTS_BY_CATEGORY:

@@ -71,11 +71,6 @@ class Post extends Component {
             return <Redirect to='/' />;
         }
 
-        // if(post && post.deleted === true){
-        //     console.log('77801',post.deleted);
-        //     return <Redirect to='/' />;
-        // }
-
         if(comments){
             console.log('778comments',JSON.stringify(comments));
         }
@@ -119,7 +114,7 @@ class Post extends Component {
                                                 <span onClick={() => this.setState({ editing: true })}>Edit</span>
                                                 <span> | </span>
                                                 <span onClick={() => {
-                                                    this.setState({ deleted: true })
+                                                    this.setState({ deleted: true });
                                                     deletePost(post.id);                                                    
                                                 }}>Delete</span>
                                             </small>

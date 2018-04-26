@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { createPost } from '../actions';
 import * as uuid from '../util/uuid';
 
@@ -7,6 +8,7 @@ class AddPost extends Component {
     
     constructor() {
         super();
+        this.state = { addedPost: false };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -34,6 +36,10 @@ class AddPost extends Component {
 
     render() {
         
+        if (this.props.addedPost === true) {
+            return <Redirect to='/' />;
+        }
+
         const { categories } = this.props;
 
         let cats = categories && categories.map((cat => {
@@ -83,10 +89,11 @@ class AddPost extends Component {
 
 function mapStateToProps(state, props) {
 
-    const { categories } = state;
+    const { categories, addedPost } = state;
 
     return {
-        categories
+        categories,
+        addedPost
     }
 }
 
