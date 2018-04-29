@@ -1,7 +1,23 @@
-import { combineReducers } from 'redux';
-
 import {
-    ADD_POST, RECEIVE_POSTS, RECEIVE_POST_COMMENTS, RECEIVE_CATEGORIES, RECEIVE_POST, GET_POSTS_BY_CATEGORY, REORDER_POSTS, UPDATE_POST_SCORE, UPDATE_COMMENT_SCORE, UPDATE_COMMENT_TEXT, ADD_COMMENT, REMOVE_COMMENT, UPDATE_POST, REMOVE_POST
+    //Cateories
+    RECEIVE_CATEGORIES,
+
+    //Posts
+    GET_POSTS_BY_CATEGORY,
+    REORDER_POSTS,
+    RECEIVE_POSTS,
+    RECEIVE_POST,
+    RECEIVE_POST_COMMENTS,
+    UPDATE_POST_SCORE,
+    UPDATE_POST,
+    REMOVE_POST,
+    ADD_POST,
+
+    //Comments
+    UPDATE_COMMENT_SCORE,
+    UPDATE_COMMENT_TEXT,
+    ADD_COMMENT,
+    REMOVE_COMMENT
 } from '../actions';
 
 const initialState = {
@@ -13,119 +29,103 @@ const initialState = {
 function posts(state = initialState, action) {
     switch (action.type) {
 
-        case RECEIVE_POST:
-            console.log('RECEIVE_POST', action.post);
+        //Categories
+        case RECEIVE_CATEGORIES:
+            const { categories } = action.categories
+            return {
+                ...state,
+                categories
+            }
 
+        //Posts
+        case GET_POSTS_BY_CATEGORY:
+            const { category } = action
             return {
                 ...state,
-                post: action.post
+                categoryFilter: category
             }
-            
-        case ADD_POST:
-            console.log('ADD_POST', action.post);
+
+        case REORDER_POSTS:
+            const { order } = action
             return {
                 ...state,
-                posts: [...state.posts, action.post],
-                addedPost: true
-            }
-        
-        case UPDATE_POST:
-            console.log('UPDATE_POST', action.post);
-            return {
-                ...state,
-                post: action.post
+                postOrder: order
             }
 
         case RECEIVE_POSTS:
             const { posts } = action
-            console.log('RECEIVE_POSTS', posts);
-
             return {
                 ...state,
                 posts,
                 addedPost: false
             }
-        
-        case GET_POSTS_BY_CATEGORY:
-            const { category } = action
-            console.log('GET_POSTS_BY_CATEGORY', category);
 
+        case RECEIVE_POST:
             return {
                 ...state,
-                categoryFilter: category
+                post: action.post
             }
-        
-        case REORDER_POSTS:
-            const { order } = action
-            console.log('ORDER_POSTS', order);
 
-            return {
-                ...state,
-                postOrder: order
-            }
-        
         case RECEIVE_POST_COMMENTS:
             const { comments } = action
-            console.log('RECEIVE_POST_COMMENTS', comments);
-
             return {
                 ...state,
                 comments
             }
 
         case UPDATE_POST_SCORE:
-            console.log('UPDATE_POST_SCORE', action.post.id, action.post.voteScore);
-            console.log('state,',JSON.stringify(state));
             return {
                 ...state,
+                post: action.post,
+                posts: state.posts.filter((p) => p.id !== action.post.id).concat(action.post)
+            }
+
+        case UPDATE_POST:
+            return {
+                ...state,
+                post: action.post,
                 posts: state.posts.filter((p) => p.id !== action.post.id).concat(action.post)
             }
 
         case REMOVE_POST:
-            console.log('REMOVE_POST', action.post.id);
             return {
                 ...state,
                 posts: state.posts.filter((p) => p.id !== action.post.id),
                 post: ''
             }
 
+        case ADD_POST:
+            return {
+                ...state,
+                posts: [...state.posts, action.post],
+                addedPost: true
+            }
+
+        //Comments
         case UPDATE_COMMENT_SCORE:
-            console.log('UPDATE_COMMENT_SCORE', action.comment.id, action.comment.voteScore);
-            console.log('state,', JSON.stringify(state));
             return {
                 ...state,
                 comments: state.comments.filter((c) => c.id !== action.comment.id).concat(action.comment)
             }
-        
+
         case UPDATE_COMMENT_TEXT:
-            console.log('UPDATE_COMMENT_TEXT', action.comment.id);
             return {
                 ...state,
                 comments: state.comments.filter((c) => c.id !== action.comment.id).concat(action.comment)
             }
 
         case ADD_COMMENT:
-            console.log('ADD_COMMENT', action.comment);
             return {
                 ...state,
                 comments: [...state.comments, action.comment]
             }
 
         case REMOVE_COMMENT:
-            console.log('REMOVE_COMMENT', action.comment.id);
             return {
                 ...state,
                 comments: state.comments.filter((c) => c.id !== action.comment.id)
             }
-                       
-        case RECEIVE_CATEGORIES:
-            const { categories } = action.categories
-            console.log('RECEIVE_CATEGORIES', categories);
 
-            return {
-                ...state,
-                categories
-            }       
         default:
             return state
     }

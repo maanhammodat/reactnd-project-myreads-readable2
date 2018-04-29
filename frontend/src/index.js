@@ -18,8 +18,6 @@ const store = createStore(
     )
 )
 
-console.log('store:',store);
-
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>

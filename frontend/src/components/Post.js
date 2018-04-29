@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getPost, getPostComments, votePost, editPost, deletePost, voteComment, postComment } from '../actions';
+import { getPosts, getPost, getPostComments, votePost, editPost, deletePost, postComment } from '../actions';
 import Comment from './Comment';
 import moment from 'moment';
 import * as uuid from '../util/uuid';
 
 class Post extends Component {
-    
+
     constructor() {
         super();
         this.state = { editing: false, deleted: false };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
-    componentDidMount(){        
-        console.log('POST DIDMOUNT, ID:',this.props.id);
+
+    componentDidMount(){
+        this.props.getPosts();
         this.props.getPost(this.props.id);
         this.props.getPostComments(this.props.id);
     }
@@ -24,13 +24,11 @@ class Post extends Component {
         event.preventDefault();
         const form = event.target;
         const formID = form.getAttribute('id');
-        console.log('778 form ID',form);
         const data = {}
         for (let element of form.elements) {
             if (element.tagName === 'BUTTON') { continue; }
             data[element.name] = element.value;
         }
-        console.log('778 data',data);
 
         switch (formID) {
             case 'addComment':
@@ -40,6 +38,9 @@ class Post extends Component {
             case 'editPost':
                 this.submitPostUpdate(data);
                 break;
+
+            default:
+                return false;
         }
 
         form.reset();
@@ -49,37 +50,27 @@ class Post extends Component {
         comment.id = uuid.generate();
         comment.parentId = this.props.id;
         comment.timestamp = Date.now();
-        console.log('778 COMMENT is ',JSON.stringify(comment));        
         this.props.postComment(JSON.stringify(comment));
-        //this.props.getPosts();
     }
 
     submitPostUpdate(post) {
-        console.log('7778 POST is ', JSON.stringify(post));
         this.props.editPost(post);
         this.setState({ editing: false });
     }
 
     render() {
 
-        console.log('POST RENDER this props', JSON.stringify(this.props));
-        console.log('POST RENDER this state', this.state);
-
-        const { post, comments, votePost, voteComment, commentCount, deletePost } = this.props;
+        const { post, comments, votePost, commentCount, deletePost } = this.props;
 
         if(this.state.deleted === true){
             return <Redirect to='/' />;
         }
 
-        if(comments){
-            console.log('778comments',JSON.stringify(comments));
-        }
-
         const editing = this.state.editing;
 
         return (
-            
-            <div>    
+
+            <div>
                 <div className="row">
 
                     <div className="col">
@@ -90,6 +81,29 @@ class Post extends Component {
 
                             <div className="list-group-item" key={post.id}>
 
+                            {editing ? (
+
+                                <form id="editPost" onSubmit={this.handleSubmit}>
+
+                                    <div className="form-group">
+                                        <label htmlFor="commentUser">Title</label>
+                                        <input type="text" className="form-control" name="title" defaultValue={post.title} placeholder="Enter Title" />
+                                    </div>
+
+                                    <div className="form-group">
+
+                                        <label htmlFor="text">Text</label>
+                                        <textarea className="form-control" name="body" rows="3" defaultValue={post.body} placeholder="Enter Text"></textarea>
+                                    </div>
+
+                                    <input value={post.id} type="hidden" name="id" />
+
+                                    <button type="submit" className="btn btn-primary">Submit</button>
+                                    <button type="button" className="ml-3 btn btn-primary" onClick={() => this.setState({ editing: false })}>Close</button>
+
+                                </form>
+                            ) : (
+                            <div>
                                 <div className="row">
 
                                     <div className="col-10">
@@ -106,61 +120,41 @@ class Post extends Component {
                                             <br />
                                             <span className="h5">
                                                 <span onClick={() => votePost(post.id, 'upVote')}><i className="fas fa-thumbs-up mr-1"></i></span>
-                                                
+
                                                 <span onClick={() => votePost(post.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
                                             </span>
                                             <br />
                                             <small className="text-right">
-                                                <span onClick={() => this.setState({ editing: true })}>Edit</span>
+                                                <span className="control" onClick={() => this.setState({ editing: true })}>Edit</span>
                                                 <span> | </span>
-                                                <span onClick={() => {
+                                                <span className="control" onClick={() => {
                                                     this.setState({ deleted: true });
-                                                    deletePost(post.id);                                                    
+                                                    deletePost(post.id);
                                                 }}>Delete</span>
                                             </small>
                                         </p>
                                     </div>
 
-                                </div> 
+                                </div>
 
                                 <hr />
 
                                 <div className="row">
                                     <div className="col">
 
-                                        {editing ? (
-                                            <div className="col-10">
-                                                <form id="editPost" onSubmit={this.handleSubmit}>
+                                        {post.body}
 
-                                                    <div className="form-group">
-                                                        <label htmlFor="commentUser">Title</label>
-                                                        <input type="text" className="form-control" name="title" defaultValue={post.title} placeholder="Enter Title" />
-                                                    </div>
-
-                                                    <div className="form-group">
-
-                                                        <label htmlFor="text">Enter Text</label>
-                                                        <textarea className="form-control" name="body" rows="3" defaultValue={post.body} placeholder="Enter Text"></textarea>
-                                                    </div>
-
-                                                    <input value={post.id} type="hidden" name="id" />
-
-                                                    <button type="submit" className="btn btn-primary">Submit</button>
-                                                    <button type="button" className="ml-3 btn btn-primary" onClick={() => this.setState({ editing: false })}>Close</button>
-
-                                                </form>
-                                            </div>
-                                        ) : (
-                                            post.body
-                                        )}
-                                        
                                     </div>
                                 </div>
 
                             </div>
+                            )}
+
+                            </div>
+
 
                         {comments && comments.map((comment) => (
-                            
+
                             <Comment
                                 key={comment.id}
                                 id={comment.id}
@@ -171,7 +165,7 @@ class Post extends Component {
                             />
 
                         ))}
-                            
+
                         </div>
 
                     )}
@@ -179,7 +173,7 @@ class Post extends Component {
                     </div>
 
                 </div>
-            
+
                 <div className="row mt-3">
                     <div className="col">
                         <div className="row">
@@ -190,7 +184,7 @@ class Post extends Component {
 
                                     <div className="form-group">
                                         <label htmlFor="commentUser">Author</label>
-                                        <input type="text" className="form-control" name="author" placeholder="Enter Author Name" />                    
+                                        <input type="text" className="form-control" name="author" placeholder="Enter Author" />
                                     </div>
 
                                     <div className="form-group">
@@ -199,8 +193,8 @@ class Post extends Component {
                                     </div>
 
                                     <button type="submit" className="btn btn-primary">Submit</button>
-                                    
-                                </form>                    
+
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -212,26 +206,25 @@ class Post extends Component {
 }
 
 function mapStateToProps(state, props) {
-    const { post, comments } = state;
-    console.log('POST mapStateToProps state', JSON.stringify(post));
-    console.log('POST mapStateToProps props', props);
-    //console.log('>>>POST filtered', posts.filter((post) => { return post.id === '8xf0y6ziyjabvozdd253nd' }));
+    const { post, comments, posts } = state;
+
     return {
         post,
+        posts,
         comments: comments ? comments.sort((a, b) => a.timestamp - b.timestamp) : '',
         commentCount: comments ? comments.length : 0
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {        
+    return {
+        getPosts: (data) => dispatch(getPosts(data)),
         getPost: (id) => dispatch(getPost(id)),
         votePost: (id, post) => dispatch(votePost(id, post)),
         editPost: (post) => dispatch(editPost(post)),
         deletePost: (id) => dispatch(deletePost(id)),
         getPostComments: (data) => dispatch(getPostComments(data)),
-        voteComment: (id, comment) => dispatch(voteComment(id, comment)),
-        postComment: (comment) => dispatch(postComment(comment))      
+        postComment: (comment) => dispatch(postComment(comment))
     }
 }
 

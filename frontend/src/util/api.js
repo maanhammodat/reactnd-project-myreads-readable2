@@ -20,7 +20,6 @@ export const getPosts = () => {
 };
 
 export const getPost = (id) => {
-    console.log('getPost id:', id);
     return fetch(
         `http://localhost:3001/posts/${id}`,
         headers
@@ -28,7 +27,6 @@ export const getPost = (id) => {
 }
 
 export const getPostComments = (id) => {
-    console.log('getPostComments id:',id);
     return fetch(
         `http://localhost:3001/posts/${id}/comments`,
         headers
@@ -36,97 +34,89 @@ export const getPostComments = (id) => {
 }
 
 export const createPost = (post) => {
-    console.log(`createPost post: ${post}`);
     return fetch(
         `http://localhost:3001/posts`,
         {
             ...headers,
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            body: post // must match 'Content-Type' header
+            method: 'POST',
+            body: post
         }
     )
 }
 
 export const votePost = (id, vote) => {
-    console.log(`votePost post: ${id} vote: ${vote}`);
     return fetch(
         `http://localhost:3001/posts/${id}`,
         {
             ...headers,
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            body: JSON.stringify({option: vote}) // must match 'Content-Type' header
+            method: 'POST',
+            body: JSON.stringify({option: vote})
         }
     )
 }
 
 export const editPost = (post) => {
-    console.log(`editPost post: ${post.id}`);
     return fetch(
         `http://localhost:3001/posts/${post.id}`,
         {
             ...headers,
-            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-            body: JSON.stringify(post) // must match 'Content-Type' header
+            method: 'PUT',
+            body: JSON.stringify(post)
         }
     )
 }
 
 export const deletePost = (id) => {
-    console.log(`deletePost post: ${id}`);
     return fetch(
         `http://localhost:3001/posts/${id}`,
         {
             ...headers,
-            method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+            method: 'DELETE',
             body: ''
         }
     )
 }
 
 export const postComment = (comment) => {
-    console.log(`postComment comment: ${comment}`);
     return fetch(
         `http://localhost:3001/comments`,
         {
             ...headers,
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            body: comment // must match 'Content-Type' header
+            method: 'POST',
+            body: comment
         }
     )
 }
 
 export const updateComment = (comment) => {
-    console.log(`updateComment comment: ${comment.id}`);
     return fetch(
         `http://localhost:3001/comments/${comment.id}`,
         {
             ...headers,
-            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-            body: JSON.stringify(comment) // must match 'Content-Type' header
+            method: 'PUT',
+            body: JSON.stringify(comment)
         }
     )
 }
 
 export const voteComment = (id, vote) => {
-    console.log(`voteComment comment: ${id} vote: ${vote}`);
     return fetch(
         `http://localhost:3001/comments/${id}`,
         {
             ...headers,
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            body: JSON.stringify({ option: vote }) // must match 'Content-Type' header
+            method: 'POST',
+            body: JSON.stringify({ option: vote })
         }
     )
 }
 
 
 export const deleteComment = (id) => {
-    console.log(`deleteComment comment: ${id}`);
     return fetch(
         `http://localhost:3001/comments/${id}`,
         {
             ...headers,
-            method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+            method: 'DELETE',
             body: ''
         }
     )

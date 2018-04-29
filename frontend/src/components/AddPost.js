@@ -5,7 +5,7 @@ import { createPost } from '../actions';
 import * as uuid from '../util/uuid';
 
 class AddPost extends Component {
-    
+
     constructor() {
         super();
         this.state = { addedPost: false };
@@ -20,7 +20,6 @@ class AddPost extends Component {
             if (element.tagName === 'BUTTON') { continue; }
             data[element.name] = element.value;
         }
-        console.log('778 data', data);
         this.submitPost(data);
         form.reset();
     }
@@ -29,13 +28,12 @@ class AddPost extends Component {
         post.id = uuid.generate();
         post.parentId = this.props.id;
         post.timestamp = Date.now();
-        console.log('778 post is ', JSON.stringify(post));
 
         this.props.createPost(JSON.stringify(post));
     }
 
     render() {
-        
+
         if (this.props.addedPost === true) {
             return <Redirect to='/' />;
         }
@@ -47,13 +45,13 @@ class AddPost extends Component {
         }))
 
         return (
-            
+
             <div className="row">
                 <div className="col">
                     <h3>Add Post</h3>
                     <hr />
                         <form onSubmit={this.handleSubmit}>
-                            
+
                             <div className="form-group">
                                 <label>Title</label>
                                 <input type="text" className="form-control" id="title" name="title" placeholder="Enter Title"/>
@@ -77,11 +75,11 @@ class AddPost extends Component {
                             </div>
 
                             <button type="submit" className="btn btn-primary">Submit</button>
-                        
+
                     </form>
-    
+
                 </div>
-    
+
             </div>
         );
     }

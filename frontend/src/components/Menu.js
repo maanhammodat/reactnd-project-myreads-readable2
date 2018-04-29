@@ -28,43 +28,38 @@ class Menu extends Component {
     }
 
     render() {
-        console.log('222MENU this props', this.props);
-        console.log('333MENU this state', this.state);
         const { categories } = this.props;
 
         let cats = categories && categories.map((cat=>{
             return <NavLink onClick={() => this.filterCategories(cat.path)} exact to={`/category/${cat.path}`} key={cat.name} activeClassName="active" className="dropdown-item">{capitalizeFirstLetter(cat.name)}</NavLink>
         }))
 
-        
         let { categoryFilter, postOrder } = this.props;
-        console.log('333MENU CAT FILTER:', categoryFilter);
-        let catLabel = 'Categories';        
+        let catLabel = 'Categories';
         catLabel = categoryFilter ? capitalizeFirstLetter(categoryFilter) : catLabel;
 
-        console.log('MENU categories',categories);
-
         return (
-            
+
             <div className="row pb-2">
                 <div className="col">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
 
                         <NavLink onClick={() => this.filterCategories()} to="/"><span className="navbar-brand">Readable</span></NavLink>
-                        
+
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
 
                         <div className="collapse navbar-collapse" id="navbarColor01">
+
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">
                                     <NavLink onClick={() => this.filterCategories()} exact to="/" activeClassName="active" className="nav-link">All</NavLink>
                                 </li>
                                 <li className="nav-item dropdown">
-                                    <a className={`nav-link dropdown-toggle${categoryFilter && ' active'}`} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{catLabel}</a>
+                                    <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{catLabel}</a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        {cats}                                        
+                                        {cats}
                                     </div>
                                 </li>
                                 <li className="nav-item">
@@ -72,13 +67,12 @@ class Menu extends Component {
                                 </li>
                             </ul>
 
-
                         </div>
 
                         <span className="nav-item nav-link disabled">Sort By:</span>
 
                         <div className="col-2 pl-0 pr-0">
-                            <select value={postOrder} onChange={this.orderPostsBy} className="form-control form-control-sm" id="exampleSelect1">                                
+                            <select value={postOrder} onChange={this.orderPostsBy} className="form-control form-control-sm" id="exampleSelect1">
                                 <option value="newest">Date: Newest</option>
                                 <option value="oldest">Date: Oldest</option>
                                 <option value="highest">Score: Highest</option>
@@ -88,15 +82,13 @@ class Menu extends Component {
 
                     </nav>
                 </div>
-            </div>                             
+            </div>
         );
     }
 }
 
 function mapStateToProps(state, props) {
     const { categories, categoryFilter, postOrder } = state;
-    console.log('111MENU mapStateToProps state', state);
-    console.log('111MENU mapStateToProps props', props);
 
     return {
         categories,

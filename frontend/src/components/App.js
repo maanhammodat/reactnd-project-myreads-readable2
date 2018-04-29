@@ -8,12 +8,11 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 class App extends Component {
 
   render() {
-    console.log('App Component PROPS', this.props.categories);
     return (
         <Router>
           <div className="container">
-            <Menu />                 
-            <Switch>            
+            <Menu />
+            <Switch>
               <Route exact path="/" component={ShowPosts} />
               <Route path="/category/:category" render={({ match }) => (
                 <ShowPosts categoryFilter={match.params.category} />
