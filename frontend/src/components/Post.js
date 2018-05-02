@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getPosts, getPost, getPostComments, votePost, editPost, deletePost, postComment } from '../actions';
 import Comment from './Comment';
-import moment from 'moment';
+import { dateFromNow } from '../util/dateFormat';
 import * as uuid from '../util/uuid';
 
 class Post extends Component {
@@ -71,134 +71,141 @@ class Post extends Component {
         return (
 
             <div>
-                <div className="row">
 
-                    <div className="col">
+                {(post && Object.keys(post).length > 0) && (
+                <div>
+                    <div className="row">
 
-                    {post && (
+                        <div className="col">
 
-                        <div className="list-group">
+                            <div className="list-group">
 
-                            <div className="list-group-item" key={post.id}>
+                                <div className="list-group-item" key={post.id}>
 
-                            {editing ? (
+                                {editing ? (
 
-                                <form id="editPost" onSubmit={this.handleSubmit}>
+                                    <form id="editPost" onSubmit={this.handleSubmit}>
 
-                                    <div className="form-group">
-                                        <label htmlFor="commentUser">Title</label>
-                                        <input type="text" className="form-control" name="title" defaultValue={post.title} placeholder="Enter Title" />
+                                        <div className="form-group">
+                                            <label htmlFor="commentUser">Title</label>
+                                            <input type="text" className="form-control" name="title" defaultValue={post.title} placeholder="Enter Title" required />
+                                        </div>
+
+                                        <div className="form-group">
+
+                                            <label htmlFor="text">Text</label>
+                                            <textarea className="form-control" name="body" rows="3" defaultValue={post.body} placeholder="Enter Text"required></textarea>
+                                        </div>
+
+                                        <input value={post.id} type="hidden" name="id" />
+
+                                        <button type="submit" className="btn btn-primary">Submit</button>
+                                        <button type="button" className="ml-3 btn btn-primary" onClick={() => this.setState({ editing: false })}>Close</button>
+
+                                    </form>
+                                ) : (
+                                <div>
+                                    <div className="row">
+
+                                        <div className="col-10">
+                                            <h3 className="mb-1"><strong>{post.title}</strong></h3>
+                                            <h5 className="mb-1">By {post.author} | {dateFromNow(post.timestamp)} | {commentCount} comments</h5>
+                                            <h5>
+                                                <span className="badge badge-pill badge-primary">{post.category}</span>
+                                            </h5>
+                                        </div>
+
+                                        <div className="col-2">
+                                            <p className="text-right">
+                                                <span className="h3">{post.voteScore}</span>
+                                                <br />
+                                                <span className="h5">
+                                                    <span onClick={() => votePost(post.id, 'upVote')}><i className="fas fa-thumbs-up mr-1"></i></span>
+
+                                                    <span onClick={() => votePost(post.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
+                                                </span>
+                                                <br />
+                                                <small className="text-right">
+                                                    <span className="control" onClick={() => this.setState({ editing: true })}>Edit</span>
+                                                    <span> | </span>
+                                                    <span className="control" onClick={() => {
+                                                        this.setState({ deleted: true });
+                                                        deletePost(post.id);
+                                                    }}>Delete</span>
+                                                </small>
+                                            </p>
+                                        </div>
+
                                     </div>
 
-                                    <div className="form-group">
+                                    <hr />
 
-                                        <label htmlFor="text">Text</label>
-                                        <textarea className="form-control" name="body" rows="3" defaultValue={post.body} placeholder="Enter Text"></textarea>
-                                    </div>
+                                    <div className="row">
+                                        <div className="col">
 
-                                    <input value={post.id} type="hidden" name="id" />
+                                            {post.body}
 
-                                    <button type="submit" className="btn btn-primary">Submit</button>
-                                    <button type="button" className="ml-3 btn btn-primary" onClick={() => this.setState({ editing: false })}>Close</button>
-
-                                </form>
-                            ) : (
-                            <div>
-                                <div className="row">
-
-                                    <div className="col-10">
-                                        <h3 className="mb-1"><strong>{post.title}</strong></h3>
-                                        <h5 className="mb-1">By {post.author} | {moment(post.timestamp).fromNow()} | {commentCount} comments</h5>
-                                        <h5>
-                                            <span className="badge badge-pill badge-primary">{post.category}</span>
-                                        </h5>
-                                    </div>
-
-                                    <div className="col-2">
-                                        <p className="text-right">
-                                            <span className="h3">{post.voteScore}</span>
-                                            <br />
-                                            <span className="h5">
-                                                <span onClick={() => votePost(post.id, 'upVote')}><i className="fas fa-thumbs-up mr-1"></i></span>
-
-                                                <span onClick={() => votePost(post.id, 'downVote')}><i className="fas fa-thumbs-down"></i></span>
-                                            </span>
-                                            <br />
-                                            <small className="text-right">
-                                                <span className="control" onClick={() => this.setState({ editing: true })}>Edit</span>
-                                                <span> | </span>
-                                                <span className="control" onClick={() => {
-                                                    this.setState({ deleted: true });
-                                                    deletePost(post.id);
-                                                }}>Delete</span>
-                                            </small>
-                                        </p>
+                                        </div>
                                     </div>
 
                                 </div>
+                                )}
 
-                                <hr />
-
-                                <div className="row">
-                                    <div className="col">
-
-                                        {post.body}
-
-                                    </div>
                                 </div>
 
-                            </div>
-                            )}
+                            {comments && comments.map((comment) => (
+
+                                <Comment
+                                    key={comment.id}
+                                    id={comment.id}
+                                    body={comment.body}
+                                    author={comment.author}
+                                    timestamp={comment.timestamp}
+                                    voteScore={comment.voteScore}
+                                />
+
+                            ))}
 
                             </div>
-
-
-                        {comments && comments.map((comment) => (
-
-                            <Comment
-                                key={comment.id}
-                                id={comment.id}
-                                body={comment.body}
-                                author={comment.author}
-                                timestamp={comment.timestamp}
-                                voteScore={comment.voteScore}
-                            />
-
-                        ))}
 
                         </div>
 
-                    )}
-
                     </div>
 
-                </div>
+                    <div className="row mt-3">
+                        <div className="col">
+                            <div className="row">
+                                <div className="col">
+                                    <h3>Add Comment</h3>
+                                    <hr />
+                                    <form id="addComment" onSubmit={this.handleSubmit}>
 
-                <div className="row mt-3">
-                    <div className="col">
-                        <div className="row">
-                            <div className="col">
-                                <h3>Add Comment</h3>
-                                <hr />
-                                <form id="addComment" onSubmit={this.handleSubmit}>
+                                        <div className="form-group">
+                                            <label htmlFor="commentUser">Author</label>
+                                            <input type="text" className="form-control" name="author" placeholder="Enter Author" required />
+                                        </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="commentUser">Author</label>
-                                        <input type="text" className="form-control" name="author" placeholder="Enter Author" />
-                                    </div>
+                                        <div className="form-group">
+                                            <label htmlFor="text">Text</label>
+                                            <textarea className="form-control" name="body" rows="3" placeholder="Enter Text" required ></textarea>
+                                        </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="text">Text</label>
-                                        <textarea className="form-control" name="body" rows="3" placeholder="Enter Text"></textarea>
-                                    </div>
+                                        <button type="submit" className="btn btn-primary">Submit</button>
 
-                                    <button type="submit" className="btn btn-primary">Submit</button>
-
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
+                )}
+
+                {(post && Object.keys(post).length === 0) && (
+                <div className="list-group-item list-group-item-action flex-column align-items-start">
+                    <h3 className="text-center">Post not found</h3>
+                </div>
+                )}
 
             </div>
         );

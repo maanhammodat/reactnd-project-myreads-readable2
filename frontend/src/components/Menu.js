@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getCategories, reorderPosts, getPostsByCategory } from '../actions';
 import { NavLink, withRouter } from 'react-router-dom';
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+import { capitalizeFirstLetter } from '../util/capitalizeFirstLetter';
 
 class Menu extends Component {
 
@@ -23,7 +20,7 @@ class Menu extends Component {
     }
 
     orderPostsBy(e) {
-        let order = e.target.value;
+        const order = e.target.value;
         this.props.reorderPosts(order);
     }
 
@@ -31,7 +28,7 @@ class Menu extends Component {
         const { categories } = this.props;
 
         let cats = categories && categories.map((cat=>{
-            return <NavLink onClick={() => this.filterCategories(cat.path)} exact to={`/category/${cat.path}`} key={cat.name} activeClassName="active" className="dropdown-item">{capitalizeFirstLetter(cat.name)}</NavLink>
+            return <NavLink onClick={() => this.filterCategories(cat.path)} exact to={`/${cat.path}`} key={cat.name} activeClassName="active" className="dropdown-item">{capitalizeFirstLetter(cat.name)}</NavLink>
         }))
 
         let { categoryFilter, postOrder } = this.props;

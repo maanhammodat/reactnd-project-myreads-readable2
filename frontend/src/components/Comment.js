@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateComment, voteComment, deleteComment } from '../actions';
-import moment from 'moment';
+import { dateFromNow } from '../util/dateFormat';
 
 class Comment extends Component {
 
@@ -43,7 +43,7 @@ class Comment extends Component {
 
                             <input value={id} type="hidden" id="id" name="id" />
 
-                            <label htmlFor="text">Enter Text</label>
+                            <label htmlFor="text">Text</label>
                             <textarea className="form-control" name="body" id="body" rows="3" defaultValue={body} placeholder="Enter Text"></textarea>
                         </div>
 
@@ -58,7 +58,7 @@ class Comment extends Component {
                 <div className="col-10">
                     <span>{body}</span>
                     <p className="mb-0">
-                        <small>By {author} | {moment(timestamp).fromNow()}</small>
+                        <small>By {author} | {dateFromNow(timestamp)}</small>
                     </p>
                 </div>
 

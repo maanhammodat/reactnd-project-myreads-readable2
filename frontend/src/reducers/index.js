@@ -31,32 +31,28 @@ function posts(state = initialState, action) {
 
         //Categories
         case RECEIVE_CATEGORIES:
-            const { categories } = action.categories
             return {
                 ...state,
-                categories
+                categories: action.categories.categories
             }
 
         //Posts
         case GET_POSTS_BY_CATEGORY:
-            const { category } = action
             return {
                 ...state,
-                categoryFilter: category
+                categoryFilter: action.category
             }
 
         case REORDER_POSTS:
-            const { order } = action
             return {
                 ...state,
-                postOrder: order
+                postOrder: action.order
             }
 
         case RECEIVE_POSTS:
-            const { posts } = action
             return {
                 ...state,
-                posts,
+                posts: action.posts,
                 addedPost: false
             }
 
@@ -67,10 +63,9 @@ function posts(state = initialState, action) {
             }
 
         case RECEIVE_POST_COMMENTS:
-            const { comments } = action
             return {
                 ...state,
-                comments
+                comments: action.comments
             }
 
         case UPDATE_POST_SCORE:

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts, reorderPosts, getPostsByCategory, votePost, editPost, deletePost } from '../actions';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+import { dateFromNow } from '../util/dateFormat';
 
 class ShowPosts extends Component {
 
@@ -96,13 +96,13 @@ class ShowPosts extends Component {
 
                                 <div className="form-group">
                                     <label htmlFor="commentUser">Title</label>
-                                    <input type="text" className="form-control" name="title" defaultValue={post.title} placeholder="Enter Title" />
+                                    <input type="text" className="form-control" name="title" defaultValue={post.title} placeholder="Enter Title" required />
                                 </div>
 
                                 <div className="form-group">
 
                                     <label htmlFor="text">Text</label>
-                                    <textarea className="form-control" name="body" rows="3" defaultValue={post.body} placeholder="Enter Text"></textarea>
+                                    <textarea className="form-control" name="body" rows="3" defaultValue={post.body} placeholder="Enter Text"required></textarea>
                                 </div>
 
                                 <input value={post.id} type="hidden" name="id" />
@@ -118,9 +118,9 @@ class ShowPosts extends Component {
 
                                 <div className="col-10">
                                     <h3 className="mb-1">
-                                        <strong><Link to={`/post/${post.id}`}>{post.title}</Link></strong>
+                                        <strong><Link to={`${post.category}/${post.id}`}>{post.title}</Link></strong>
                                     </h3>
-                                    <h5 className="mb-1">By {post.author} | {moment(post.timestamp).fromNow()} | {post.commentCount} comments</h5>
+                                    <h5 className="mb-1">By {post.author} | {dateFromNow(post.timestamp)} | {post.commentCount} comments</h5>
 
                                     <h5>
                                         <span className="badge badge-pill badge-primary">{post.category}</span>
